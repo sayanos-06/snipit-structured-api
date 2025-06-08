@@ -1,22 +1,25 @@
-FROM rasa/duckling:latest AS duckling
-
 FROM python:3.10-slim
 
-# Install Flask, requests, supervisor
-RUN apt-get update && apt-get install -y supervisor && \
-    pip install flask requests
+# Duckling dependencies
+RUN apt-get update && \
+    apt-get install -y libpcre3 libpcre3-dev curl git supervisor && \
+    curl -sSL https://get.haskellstack.org/ | sh
 
-# Copy Duckling binary from rasa/duckling image
-COPY --from=duckling /duckling /duckling
+# Install Python dependencies
+RUN pip install flask requests
 
-# Copy Flask app
+# Install Duckling from source
+RUN git clone https://github.com/facebook/duckling.git /duckling
+WORKDIR /duckling
+RUN stack setup && stack build
+
+# Add Flask API
 WORKDIR /app
 COPY . /app
 
-# Add supervisord configuration
+# Add supervisor config
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Expose Flask + Duckling ports
 EXPOSE 5000
 
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
