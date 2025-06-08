@@ -24,7 +24,14 @@ def parse():
             "dims": data.get("dims", ["time", "email", "url", "phone-number"])
         }
         res = requests.post(DUCKLING_URL, json=payload)
-        return jsonify(res.json())
+        try:
+            duckling_json = res.json()
+            return jsonify(duckling_json)
+        except Exception:
+            print("❗ RAW Duckling Response:", res.text)  # Log for debugging
+            return jsonify({
+                "error": "Duckling returned non-JSON response",
+                "raw": res.text
+            }), 500
     except Exception as e:
-        print("Duckling response text:", res.text)
         return jsonify({"error": str(e)}), 500
