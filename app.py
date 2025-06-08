@@ -23,7 +23,7 @@ def parse():
             "tz": data.get("tz", "Asia/Kolkata"),
             "dims": data.get("dims", ["time", "email", "url", "phone-number"])
         }
-        res = requests.post(DUCKLING_URL, data=payload)
+        res = requests.post(DUCKLING_URL, json=payload)
         return jsonify(res.json())
     except Exception as e:
         return jsonify({"error": str(e)}), 500
