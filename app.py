@@ -9,7 +9,11 @@ DUCKLING_URL = "http://snipit-structured-api.onrender.com/parse"
 def parse():
     try:
         if not request.is_json:
-            return jsonify({"error": "Expected application/json content type"}), 415
+            actual_type = request.headers.get("Content-Type", "missing")
+            return jsonify({
+                "error": "Expected application/json Content-Type",
+                "received": actual_type
+            }), 415
 
         data = request.get_json()
         
