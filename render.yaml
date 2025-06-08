@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: duckling-flask-api
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: FLASK_APP
+        value: app.py
