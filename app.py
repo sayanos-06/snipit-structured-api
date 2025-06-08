@@ -8,7 +8,11 @@ DUCKLING_URL = "http://snipit-structured-api.onrender.com/parse"
 @app.route("/parse", methods=["POST"])
 def parse():
     try:
-        data = request.get_json(force = True)
+        if not request.is_json:
+            return jsonify({"error": "Expected application/json content type"}), 415
+
+        data = request.get_json()
+        
         payload = {
             "text": data["text"],
             "locale": data.get("locale", "en_US"),
