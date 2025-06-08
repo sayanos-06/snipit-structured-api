@@ -23,7 +23,7 @@ def parse():
             "tz": data.get("tz", "Asia/Kolkata"),
             "dims": data.get("dims", ["time", "email", "url", "phone-number"])
         }
-        res = requests.post(DUCKLING_URL, json=payload)
+        res = requests.post(DUCKLING_URL, data = payload)
         try:
             duckling_json = res.json()
             return jsonify(duckling_json)
