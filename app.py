@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-DUCKLING_URL = "http://snipit-structured-api.onrender.com/parse"
+DUCKLING_URL = "https://duckling-snipit-api.onrender.com/parse"
 
 @app.route("/parse", methods=["POST"])
 def parse():
