@@ -1,16 +1,9 @@
-FROM rasa/duckling:latest
+FROM python:3.10-slim
 
-# Install Python + Flask + Requests
-RUN apt-get update && apt-get install -y python3 python3-pip supervisor && \
-    pip3 install flask requests
-
-# Set working directory
 WORKDIR /app
+COPY . /app
 
-# Copy Flask API
-COPY app.py /app/app.py
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN pip install -r requirements.txt
 
 EXPOSE 5000
-
-CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
