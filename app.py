@@ -26,4 +26,5 @@ def parse():
         res = requests.post(DUCKLING_URL, json=payload)
         return jsonify(res.json())
     except Exception as e:
+        print("Duckling response text:", res.text)
         return jsonify({"error": str(e)}), 500
